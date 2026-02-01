@@ -14,6 +14,15 @@ Behavior:
 EOF
 }
 
+log() {
+  printf '%s\n' "$*"
+}
+
+run() {
+  log "+ $*"
+  "$@"
+}
+
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   usage
   exit 0
@@ -64,8 +73,9 @@ if [[ ${#FILES[@]} -eq 0 ]]; then
   exit 1
 fi
 
+log "Updating wrapper workflows to tag '${TAG}'"
 for file in "${FILES[@]}"; do
-  sed -i -E \
+  run sed -i -E \
     "s|(shared-common/gh-actions-shared/\\.github/workflows/[^@[:space:]]+)@[^[:space:]]+|\\1@${TAG}|g" \
     -e "s|(shared-ref: )[[:graph:]]+|\\1${TAG}|g" \
     "$file"
@@ -76,6 +86,8 @@ if git -C "$ROOT" diff --quiet -- "$WORKFLOWS_DIR"; then
   exit 1
 fi
 
-git -C "$ROOT" add "$WORKFLOWS_DIR"
-git -C "$ROOT" commit -m "chore: bump shared workflows to ${TAG}"
-git -C "$ROOT" push origin main
+log "Workflow changes:"
+run git -C "$ROOT" diff --stat -- "$WORKFLOWS_DIR"
+run git -C "$ROOT" add "$WORKFLOWS_DIR"
+run git -C "$ROOT" commit -m "chore: bump shared workflows to ${TAG}"
+run git -C "$ROOT" push origin main
