@@ -30,7 +30,7 @@ jobs:
       expected-event-action: ${{ inputs.dispatch_action }}
       target-org: ${{ github.repository_owner }}
       shared-repo: shared-common/gh-actions-shared
-      shared-ref: v0.0.1
+      shared-ref: v0.0.3
       bws-version: ${{ vars.BWS_VERSION }}
       bws-sha256: ${{ vars.BWS_SHA256 }}
     secrets:

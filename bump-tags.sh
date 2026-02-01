@@ -61,6 +61,12 @@ if [[ "$BRANCH" != "main" ]]; then
   exit 1
 fi
 
+if sed --version >/dev/null 2>&1; then
+  SED_INPLACE=(-i)
+else
+  SED_INPLACE=(-i '')
+fi
+
 WORKFLOWS_DIR="${ROOT}/.github/workflows"
 if [[ ! -d "$WORKFLOWS_DIR" ]]; then
   echo "Error: workflows directory not found." >&2
@@ -74,9 +80,14 @@ if [[ ${#FILES[@]} -eq 0 ]]; then
 fi
 
 log "Updating wrapper workflows to tag '${TAG}'"
+log "Files to update:"
 for file in "${FILES[@]}"; do
-  run sed -i -E \
-    "s|(shared-common/gh-actions-shared/\\.github/workflows/[^@[:space:]]+)@[^[:space:]]+|\\1@${TAG}|g" \
+  log " - ${file}"
+done
+for file in "${FILES[@]}"; do
+  log "Processing ${file}"
+  run sed "${SED_INPLACE[@]}" -E \
+    -e "s|(shared-common/gh-actions-shared/\\.github/workflows/[^@[:space:]]+)@[^[:space:]]+|\\1@${TAG}|g" \
     -e "s|(shared-ref: )[[:graph:]]+|\\1${TAG}|g" \
     "$file"
 done
