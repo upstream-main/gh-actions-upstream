@@ -21,3 +21,8 @@ Org-specific GitHub Actions wrapper workflows that call shared reusable workflow
 2) Update wrapper `uses:` to `@v0.0.2` and set `shared-ref: v0.0.2`.
 3) During rollout, keep the previous tag available in shared `allowed_refs` for fast rollback.
 4) To rollback, revert wrappers to the previous tag.
+
+### Helper script (preferred)
+```bash
+./bump-tags.sh --v0.0.2
+```
