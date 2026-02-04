@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: read
     uses: >-
-      shared-common/gh-actions-shared/.github/workflows/orchestrator-core.yml@v0.0.13
+      shared-common/gh-actions-shared/.github/workflows/orchestrator-core.yml@v0.0.14
     with:
       event-payload: ${{ inputs.event_payload }}
       event-context: ${{ toJson(github.event) }}
@@ -30,7 +30,7 @@ jobs:
       expected-event-action: ${{ inputs.dispatch_action }}
       target-org: ${{ github.repository_owner }}
       shared-repo: shared-common/gh-actions-shared
-      shared-ref: v0.0.13
+      shared-ref: v0.0.14
       bws-version: ${{ vars.BWS_VERSION }}
       bws-sha256: ${{ vars.BWS_SHA256 }}
     secrets:
